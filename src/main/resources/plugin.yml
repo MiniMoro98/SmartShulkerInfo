@@ -13,3 +13,6 @@ permissions:
   shulkerinfo.chat:
     description: Permission for player.
     default: op
+  shulkerinfo.reload:
+    description: Permission for operator.
+    default: op
