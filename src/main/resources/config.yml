@@ -1,21 +1,23 @@
-requires-free-hand: true
+requires-free-hand: false
+requires-block-below: false
+bellow-block: "CRAFTING_TABLE"
 
 Hologram:
   enable: true
   amount-item: 3
   timeout: 5
   tab: "&6&lShulkerBox"
-  line-text: "&7%n%) &f%item% &7- &e%amount%"  #Position + Items + Quantity
-  #line-text: "&f%item% &e%amount%"             #Item + Quantity
-  #line-text: "&f%item%"                        #Item
+  line-text: "&7%n%) &f%item% &7- &e%amount%"  # Position + Items + Quantity
+  #line-text: "&f%item% &e%amount%"             # Item + Quantity
+  #line-text: "&f%item%"                        # Item
   empty: "&cEmpty"
 
 Chat:
   enable: true
   amount-item: 3
   tab: "&6--- ShulkerBox ---"
-  line-text: "&f%item% &7- &e%amount%"
-  #line-text: "&7> &f%item% &7- &e%amount%"
-  #line-text: "&7> &f%item%"
+  line-text: "&7%n%) &f%item% &7- &e%amount%"  # Position + Item + Quantity
+  #line-text: "&7> &f%item% &7- &e%amount%"     # Item + Quantity
+  #line-text: "&7> &f%item%"                    # Item
   end-tab: "&6-----------------"
   empty: "&cEmpty"

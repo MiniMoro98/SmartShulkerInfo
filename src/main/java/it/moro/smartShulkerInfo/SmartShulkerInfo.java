@@ -57,17 +57,19 @@ public final class SmartShulkerInfo extends JavaPlugin implements Listener, Comm
                             player.sendMessage("§aConfiguration reloaded!");
                             return true;
                         }
-                    } else if (args[0].equalsIgnoreCase("killarmorstand")) {
-                        List<Entity> entities = new ArrayList<>(Bukkit.getWorlds().getFirst().getEntities());
-                        for (Entity entity : entities) {
-                            if (entity instanceof ArmorStand armorStand) {
-                                if (!armorStand.isVisible() && armorStand.isCustomNameVisible()) {
-                                    armorStand.remove();
+                    } else if (args[0].equalsIgnoreCase("removeholograms")) {
+                        if(player.hasPermission("shulkerinfo.removeholograms")) {
+                            List<Entity> entities = new ArrayList<>(Bukkit.getWorlds().getFirst().getEntities());
+                            for (Entity entity : entities) {
+                                if (entity instanceof ArmorStand armorStand) {
+                                    if (!armorStand.isVisible() && armorStand.isCustomNameVisible()) {
+                                        armorStand.remove();
+                                    }
                                 }
                             }
+                            player.sendMessage("§aAll holograms have been removed");
+                            return true;
                         }
-                        player.sendMessage("§aAll armorstands have been removed");
-                        return true;
                     }
                 }
             }
@@ -79,9 +81,14 @@ public final class SmartShulkerInfo extends JavaPlugin implements Listener, Comm
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if(command.getName().equalsIgnoreCase("shulkerinfo")) {
             Player player = (Player) sender;
-            if (player.hasPermission("shulkerinfo.killarmorstand")) {
+            if (player.hasPermission("shulkerinfo.removeholograms")) {
                 if (args.length == 1) {
-                    return Arrays.asList("reload", "killarmorstand");
+                    return List.of("removeholograms");
+                }
+                return Collections.emptyList();
+            } else if(player.hasPermission("shulkerinfo.reload")){
+                if (args.length == 1) {
+                    return List.of("reload");
                 }
                 return Collections.emptyList();
             }
@@ -114,30 +121,47 @@ public final class SmartShulkerInfo extends JavaPlugin implements Listener, Comm
             Player player = event.getPlayer();
             if (config.getBoolean("requires-free-hand")) {
                 if (player.getInventory().getItemInMainHand().getType() == Material.AIR) {
-                    Block block = event.getClickedBlock();
-                    if (block.getType() == Material.SHULKER_BOX) {
-                        Location shulker = block.getLocation();
-                        Location location = new Location(block.getWorld(), shulker.getBlockX(), shulker.getBlockY() - 1, shulker.getBlockZ());
-                        if (location.getBlock().getType() == Material.CRAFTING_TABLE) {
-                            if (config.getBoolean("Hologram.enable")) {
+                    elaborazione(event, player);
+                }
+            } else {
+                elaborazione(event, player);
+            }
+        }
+    }
+
+    void elaborazione(PlayerInteractEvent event, Player player ){
+        Block block = event.getClickedBlock();
+        if(block != null) {
+            if (block.getType().toString().contains("SHULKER_BOX")) {
+                Location shulker = block.getLocation();
+                Location location = new Location(block.getWorld(), shulker.getBlockX(), shulker.getBlockY() - 1, shulker.getBlockZ());
+                if(config.getBoolean("requires-block-below")) {
+                    Material bellow;
+                    if(!Objects.requireNonNull(config.getString("bellow-block")).equalsIgnoreCase("")){
+                        bellow = Material.getMaterial(Objects.requireNonNull(config.getString("bellow-block")));
+                    } else {
+                        bellow = Material.getMaterial("CRAFTING_TABLE");
+                    }
+                    if (location.getBlock().getType() == bellow) {
+                        if (config.getBoolean("Hologram.enable")) {
+                            if (player.hasPermission("shulkerinfo.hologram")) {
                                 showShulkerBoxItems(player, shulker);
                             }
-                            if (config.getBoolean("Chat.enable")) {
+                        }
+                        if (config.getBoolean("Chat.enable")) {
+                            if (player.hasPermission("shulkerinfo.chat")) {
                                 chatShulkerBoxItems(player, shulker);
                             }
                         }
                     }
-                }
-            } else {
-                Block block = event.getClickedBlock();
-                if (block.getType() == Material.SHULKER_BOX) {
-                    Location shulker = block.getLocation();
-                    Location location = new Location(block.getWorld(), shulker.getBlockX(), shulker.getBlockY() - 1, shulker.getBlockZ());
-                    if (location.getBlock().getType() == Material.CRAFTING_TABLE) {
-                        if (config.getBoolean("Hologram.enable")) {
+                } else {
+                    if (config.getBoolean("Hologram.enable")) {
+                        if (player.hasPermission("shulkerinfo.hologram")) {
                             showShulkerBoxItems(player, shulker);
                         }
-                        if (config.getBoolean("Chat.enable")) {
+                    }
+                    if (config.getBoolean("Chat.enable")) {
+                        if (player.hasPermission("shulkerinfo.chat")) {
                             chatShulkerBoxItems(player, shulker);
                         }
                     }

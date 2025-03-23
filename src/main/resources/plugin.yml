@@ -16,6 +16,6 @@ permissions:
   shulkerinfo.reload:
     description: Permission for operator.
     default: op
-  shulkerinfo.killarmorstand:
+  shulkerinfo.removeholograms:
     description: Permission for operator.
     default: op
