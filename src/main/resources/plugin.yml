@@ -1,0 +1,15 @@
+name: SmartShulkerInfo
+version: ${project.version}
+main: it.moro.smartShulkerInfo.SmartShulkerInfo
+api-version: '1.13'
+commands:
+  shulkerinfo:
+    usage: /shulkerinfo
+
+permissions:
+  shulkerinfo.hologram:
+    description: Permission for player.
+    default: op
+  shulkerinfo.chat:
+    description: Permission for player.
+    default: op

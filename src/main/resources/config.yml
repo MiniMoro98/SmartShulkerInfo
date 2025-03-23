@@ -1,0 +1,15 @@
+Hologram:
+  enable: true
+  amount-item: 3
+  timeout: 5
+  tab: "&6&lShulkerBox"
+  line-text: "&7%n%) &f%item% &7- &e%amount%"  #Position + Items + Quantity
+  #line-text: "&f%item% &e%amount%"             #Item + Quantity
+  #line-text: "&f%item%"                        #Item
+  empty: "&c&lEmpty"
+
+Chat:
+  enable: true
+  amount-item: 3
+  tab: "&6&l====== ShulkerBox ======"
+  line-text: "&f%item% &7- &e%amount%"
